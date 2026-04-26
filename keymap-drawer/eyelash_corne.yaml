@@ -197,5 +197,11 @@ layers:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: QWERTY, h: toggle}
 combos:
-- p: [1, 15, 29]
-  k: '&soft_off'
+- p: [4, 5]
+  k: (
+- p: [7, 8]
+  k: )
+- p: [32, 33]
+  k: <
+- p: [36, 37]
+  k: <
