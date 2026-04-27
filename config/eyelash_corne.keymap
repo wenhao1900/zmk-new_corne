@@ -1,5 +1,5 @@
-#define ZMK_POINTING_DEFAULT_MOVE_VAL 1500  // 维持你满意的起步速度
-#define ZMK_POINTING_DEFAULT_SCRL_VAL 25    // 提高初始滚动量，解决点按幅度小的问题
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 1500  
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 40    
 
 #include <input/processors.dtsi>
 #include <zephyr/dt-bindings/input/input-event-codes.h>
@@ -12,17 +12,15 @@
 
 &msc_input_listener { input-processors = <&zip_scroll_scaler 2 1>; };
 
-/* --- 滚动设置：增大点按幅度，维持平滑加速 --- */
 &msc {
     acceleration-exponent = <2>;      
-    time-to-max-speed-ms = <300>;     
+    time-to-max-speed-ms = <200>;     
     delay-ms = <0>;                   
 };
 
-/* --- 鼠标移动：解决“收不住”问题 --- */
 &mmv {
-    time-to-max-speed-ms = <600>;    // 大幅拉长加速过程，给长按留出更多控制空间
-    acceleration-exponent = <2>;     // 指数加速保证了后期仍有爆发力，但过程更可控
+    time-to-max-speed-ms = <200>;    
+    acceleration-exponent = <2>;     
     trigger-period-ms = <8>;         
 };
 
@@ -101,7 +99,7 @@
             bindings = <
 &trans  &kp GRAVE       &kp UP_ARROW    &kp N3           &kp N4          &kp N9                                             &mmv MOVE_UP                     &kp NUMBER_3  &kp NUMBER_6  &trans         &trans     &kp N0       &trans
 &trans  &kp LEFT_ARROW  &kp DOWN_ARROW  &kp RIGHT_ARROW  &kp NUMBER_0    &kp NUMBER_8                       &mmv MOVE_LEFT  &mkp LCLK       &mmv MOVE_RIGHT  &kp NUMBER_2  &kp N5        &kp LA(MINUS)  &kp EQUAL  &kp LA(SQT)  &trans
-&trans  &trans          &trans          &trans           &trans          &kp N7              &kp C_MUTE                     &mmv MOVE_DOWN                   &kp NUMBER_1  &kp NUMBER_4  &kp LBKT       &kp RBKT   &kp CAPS     &trans
+&trans  &trans          &trans          &trans           &trans          &kp N7              &kp C_MUTE                     &mmv DOWN_ARROW                   &kp NUMBER_1  &kp NUMBER_4  &kp LBKT       &kp RBKT   &kp CAPS     &trans
                                         &trans           &kp LEFT_SHIFT  &mt LEFT_GUI SPACE                                                                  &kp TAB       &kp ENTER     &trans
             >;
             sensor-bindings = <&scroll_encoder>;
@@ -121,9 +119,9 @@
         layer_3 {
             display-name = "Fn";
             bindings = <
-&trans  &to 0           &kp W             &mkp MB4      &mkp MB2        &mkp MB1                                     &mmv MOVE_UP                     &msc SCRL_LEFT  &msc SCRL_DOWN  &msc SCRL_UP  &msc SCRL_RIGHT  &to 0   &trans
+&trans  &to 0           &kp W             &mkp MB4      &mmb_on         &mkp MB1                                     &mmv MOVE_UP                     &msc SCRL_LEFT  &msc SCRL_DOWN  &msc SCRL_UP  &msc SCRL_RIGHT  &to 0   &trans
 &trans  &kp LEFT_SHIFT  &kp LEFT_CONTROL  &kp LEFT_ALT  &mmb_on         &mkp MB2                      &mmv MOVE_LEFT  &mkp LCLK       &mmv MOVE_RIGHT  &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_UP  &mmv MOVE_RIGHT  &trans  &trans
-&trans  &sys_reset      &trans            &bootloader   &kp LEFT_ARROW  &kp RIGHT_ARROW  &kp C_MUTE                  &mmv MOVE_DOWN                   &mkp MB4        &mkp MCLK       &mkp MB5      &sys_reset       &trans  &trans
+&trans  &sys_reset      &trans            &bootloader   &kp LEFT_ARROW  &kp RIGHT_ARROW  &kp C_MUTE                  &mmv DOWN_ARROW                   &mkp MB4        &mkp MCLK       &mkp MB5      &sys_reset       &trans  &trans
                                           &trans        &kp LEFT_SHIFT  &mt LEFT_GUI SPACE                                                            &lt 1 TAB       &lt 2 ENTER     &to 0
             >;
             sensor-bindings = <&scroll_encoder>;
@@ -132,10 +130,10 @@
         mouse_lock_layer {
             display-name = "LOCK";
             bindings = <
-&trans  &trans  &trans  &trans  &trans  &trans                                  &trans          &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &mmb_off  &trans                &trans  &trans  &trans          &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans  &trans          &trans          &trans          &trans  &trans  &trans  &trans  &trans
-                        &trans  &trans  &trans                                                  &trans  &trans  &trans
+&trans  &trans          &trans            &trans        &mmb_off        &trans                                  &trans          &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans          &trans            &trans        &mmb_off        &trans                &trans  &trans  &trans          &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans          &trans            &trans        &trans          &trans  &trans          &trans          &trans          &trans  &trans  &trans  &trans  &trans
+                        &trans            &trans        &trans                                                  &trans  &trans  &trans
             >;
             sensor-bindings = <&scroll_encoder>;
         };
