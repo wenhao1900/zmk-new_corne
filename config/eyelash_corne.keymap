@@ -1,5 +1,5 @@
-#define ZMK_POINTING_DEFAULT_MOVE_VAL 1200  // 600
-#define ZMK_POINTING_DEFAULT_SCRL_VAL 25    // 10
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 1200  // 基础移动速度
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 25    // 基础滚动速度
 
 #include <input/processors.dtsi>
 #include <zephyr/dt-bindings/input/input-event-codes.h>
@@ -18,24 +18,22 @@
     delay-ms = <0>;                   
 };
 
+/* --- 方案 B：精准 + 爆发模式配置 --- */
 &mmv {
-    time-to-max-speed-ms = <500>;
-    acceleration-exponent = <1>;
-    trigger-period-ms = <16>;
+    time-to-max-speed-ms = <400>;    // 起步稍微加快，400ms 达到最高速
+    acceleration-exponent = <2>;     // 指数加速：轻按极慢实现精确定位，重按飞快
+    trigger-period-ms = <8>;         // 采样频率加倍，指针极其平滑
 };
 
 &soft_off { hold-time-ms = <2000>; };
 
 / {
-    /* 定义宏：使用切换逻辑，确保动作对称 */
     macros {
-        // 开启锁定：按下中键，并叠加开启第 4 层 (LOCK)
         mmb_on: mmb_on {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
             bindings = <&macro_press &mkp MCLK>, <&macro_tap &tog 4>;
         };
-        // 关闭锁定：释放中键，并撤销第 4 层 (LOCK)
         mmb_off: mmb_off {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
@@ -130,7 +128,6 @@
             sensor-bindings = <&scroll_encoder>;
         };
 
-        /* 修正后的锁定层：已严格对齐所有按键数 (13-15-14-6) */
         mouse_lock_layer {
             display-name = "LOCK";
             bindings = <
