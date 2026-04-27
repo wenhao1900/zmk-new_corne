@@ -27,19 +27,26 @@
 &soft_off { hold-time-ms = <2000>; };
 
 / {
+    /* 定义两个宏，用来控制开关 */
+    macros {
+        mmb_on: mmb_on {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_press &mkp MCLK>, <&tog 4>;
+        };
+        mmb_off: mmb_off {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_release &mkp MCLK>, <&tog 4>;
+        };
+    };
+
     behaviors {
         td0: td0 {
             compatible = "zmk,behavior-tap-dance";
             display-name = "Shift/Caps Lock Tap Dance";
             #binding-cells = <0>;
             bindings = <&kp LEFT_SHIFT>, <&kp CAPS>;
-        };
-
-        /* 核心：定义单击切换(Toggle)行为 */
-        mmb_lock: mmb_lock {
-            compatible = "zmk,behavior-key-lock";
-            #binding-cells = <0>;
-            bindings = <&mkp MCLK>;
         };
 
         hm: homerow_mods {
@@ -126,9 +133,21 @@
             display-name = "Fn";
             bindings = <
 &trans  &to 0           &kp W             &mkp MB4      &mkp MB2        &mkp MB1                                     &mmv MOVE_UP                     &msc SCRL_LEFT  &msc SCRL_DOWN  &msc SCRL_UP  &msc SCRL_RIGHT  &to 0   &trans
-&trans  &kp LEFT_SHIFT  &kp LEFT_CONTROL  &kp LEFT_ALT  &mmb_lock       &mkp MB2                      &mmv MOVE_LEFT  &mkp LCLK       &mmv MOVE_RIGHT  &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_UP  &mmv MOVE_RIGHT  &trans  &trans
+&trans  &kp LEFT_SHIFT  &kp LEFT_CONTROL  &kp LEFT_ALT  &mmb_on         &mkp MB2                      &mmv MOVE_LEFT  &mkp LCLK       &mmv MOVE_RIGHT  &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_UP  &mmv MOVE_RIGHT  &trans  &trans
 &trans  &sys_reset      &trans            &bootloader   &kp LEFT_ARROW  &kp RIGHT_ARROW  &kp C_MUTE                  &mmv MOVE_DOWN                   &mkp MB4        &mkp MCLK       &mkp MB5      &sys_reset       &trans  &trans
                                           &trans        &kp LEFT_SHIFT  &mt LEFT_GUI SPACE                                                            &lt 1 TAB       &lt 2 ENTER     &to 0
+            >;
+            sensor-bindings = <&scroll_encoder>;
+        };
+
+        /* 新增锁定层（Layer 4）：用来承载解锁宏 */
+        mouse_lock_layer {
+            display-name = "LOCK";
+            bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans                                  &trans          &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &mmb_off  &trans                &trans  &trans  &trans          &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans                          &trans          &trans  &trans  &trans  &trans  &trans  &trans
+                        &trans  &trans  &trans                                                  &trans  &trans  &trans
             >;
             sensor-bindings = <&scroll_encoder>;
         };
