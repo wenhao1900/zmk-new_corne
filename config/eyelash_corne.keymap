@@ -13,9 +13,9 @@
 &msc_input_listener { input-processors = <&zip_scroll_scaler 2 1>; };
 
 &msc {
-    acceleration-exponent = <1>;      // 0
-    time-to-max-speed-ms = <100>;       // 300
-    delay-ms = <0>;                   // 0
+    acceleration-exponent = <1>;      
+    time-to-max-speed-ms = <100>;       
+    delay-ms = <0>;                   
 };
 
 &mmv {
@@ -27,17 +27,19 @@
 &soft_off { hold-time-ms = <2000>; };
 
 / {
-    /* 定义两个宏，用来控制开关 */
+    /* 优化后的宏：使用绝对跳转 &to 确保逻辑闭环 */
     macros {
+        // 开启锁定：按下中键，并绝对跳转到第 4 层 (LOCK)
         mmb_on: mmb_on {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&macro_press &mkp MCLK>, <&tog 4>;
+            bindings = <&macro_press &mkp MCLK>, <&to 4>;
         };
+        // 关闭锁定：释放中键，并绝对跳转回第 3 层 (Fn)
         mmb_off: mmb_off {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&macro_release &mkp MCLK>, <&tog 4>;
+            bindings = <&macro_release &mkp MCLK>, <&to 3>;
         };
     };
 
@@ -75,22 +77,10 @@
 
     combos {
         compatible = "zmk,combos";
-        rt {
-            bindings = <&kp LEFT_PARENTHESIS>;
-            key-positions = <4 5>;
-        };
-        yu {
-            bindings = <&kp RIGHT_PARENTHESIS>;
-            key-positions = <7 8>;
-        };
-        vb {
-            bindings = <&kp APOSTROPHE>;
-            key-positions = <32 33>;
-        };
-        nm {
-            bindings = <&kp APOSTROPHE>;
-            key-positions = <36 37>;
-        };
+        rt { bindings = <&kp LEFT_PARENTHESIS>; key-positions = <4 5>; };
+        yu { bindings = <&kp RIGHT_PARENTHESIS>; key-positions = <7 8>; };
+        vb { bindings = <&kp APOSTROPHE>; key-positions = <32 33>; };
+        nm { bindings = <&kp APOSTROPHE>; key-positions = <36 37>; };
     };
 
     keymap {
@@ -140,7 +130,6 @@
             sensor-bindings = <&scroll_encoder>;
         };
 
-        /* 新增锁定层（Layer 4）：用来承载解锁宏 */
         mouse_lock_layer {
             display-name = "LOCK";
             bindings = <
