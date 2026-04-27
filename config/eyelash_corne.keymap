@@ -27,6 +27,21 @@
 &soft_off { hold-time-ms = <2000>; };
 
 / {
+    macros {
+        // 宏：按下中键不释放
+        mmb_hold: mmb_hold {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_press &mkp MCLK>;
+        };
+        // 宏：释放中键
+        mmb_rel: mmb_rel {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_release &mkp MCLK>;
+        };
+    };
+
     behaviors {
         td0: td0 {
             compatible = "zmk,behavior-tap-dance";
@@ -35,14 +50,14 @@
             bindings = <&kp LEFT_SHIFT>, <&kp CAPS>;
         };
 
-        /* 自定义中键锁定行为 */
-        mmb_lock: mmb_lock {
-            compatible = "zmk,behavior-key-lock";
+        // 连击行为：单击锁定中键，双击释放中键
+        td_mmb: td_mmb {
+            compatible = "zmk,behavior-tap-dance";
             #binding-cells = <0>;
-            bindings = <&mkp MB3>;
+            tapping-term-ms = <200>;
+            bindings = <&mmb_hold>, <&mmb_rel>;
         };
 
-        /* 自定义 Home Row Mods 行为 */
         hm: homerow_mods {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
@@ -127,7 +142,7 @@
             display-name = "Fn";
             bindings = <
 &trans  &to 0           &kp W             &mkp MB4      &mkp MB2        &mkp MB1                                     &mmv MOVE_UP                     &msc SCRL_LEFT  &msc SCRL_DOWN  &msc SCRL_UP  &msc SCRL_RIGHT  &to 0   &trans
-&trans  &kp LEFT_SHIFT  &kp LEFT_CONTROL  &kp LEFT_ALT  &mmb_lock       &mkp MB2                      &mmv MOVE_LEFT  &mkp LCLK       &mmv MOVE_RIGHT  &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_UP  &mmv MOVE_RIGHT  &trans  &trans
+&trans  &kp LEFT_SHIFT  &kp LEFT_CONTROL  &kp LEFT_ALT  &td_mmb         &mkp MB2                      &mmv MOVE_LEFT  &mkp LCLK       &mmv MOVE_RIGHT  &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_UP  &mmv MOVE_RIGHT  &trans  &trans
 &trans  &sys_reset      &trans            &bootloader   &kp LEFT_ARROW  &kp RIGHT_ARROW  &kp C_MUTE                  &mmv MOVE_DOWN                   &mkp MB4        &mkp MCLK       &mkp MB5      &sys_reset       &trans  &trans
                                           &trans        &kp LEFT_SHIFT  &mt LEFT_GUI SPACE                                                            &lt 1 TAB       &lt 2 ENTER     &to 0
             >;
