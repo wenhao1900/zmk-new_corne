@@ -1,5 +1,5 @@
-#define ZMK_POINTING_DEFAULT_MOVE_VAL 1500  // 基础速度进一步提升
-#define ZMK_POINTING_DEFAULT_SCRL_VAL 25    
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 1500  // 维持你满意的起步速度
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 25    // 提高初始滚动量，解决点按幅度小的问题
 
 #include <input/processors.dtsi>
 #include <zephyr/dt-bindings/input/input-event-codes.h>
@@ -12,17 +12,18 @@
 
 &msc_input_listener { input-processors = <&zip_scroll_scaler 2 1>; };
 
+/* --- 滚动设置：增大点按幅度，维持平滑加速 --- */
 &msc {
-    acceleration-exponent = <1>;      
-    time-to-max-speed-ms = <100>;       
+    acceleration-exponent = <2>;      
+    time-to-max-speed-ms = <300>;     
     delay-ms = <0>;                   
 };
 
-/* --- 极速响应版：瞬时起步 + 高速航行 --- */
+/* --- 鼠标移动：解决“收不住”问题 --- */
 &mmv {
-    time-to-max-speed-ms = <150>;    // 起步时间大幅缩短，实现“弹射起步”
-    acceleration-exponent = <2>;     // 维持指数加速，保留微调精度的同时也让加速更猛
-    trigger-period-ms = <8>;         // 高频采样，保证高速移动下的顺滑度
+    time-to-max-speed-ms = <600>;    // 大幅拉长加速过程，给长按留出更多控制空间
+    acceleration-exponent = <2>;     // 指数加速保证了后期仍有爆发力，但过程更可控
+    trigger-period-ms = <8>;         
 };
 
 &soft_off { hold-time-ms = <2000>; };
