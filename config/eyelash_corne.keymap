@@ -27,19 +27,17 @@
 &soft_off { hold-time-ms = <2000>; };
 
 / {
-    /* 优化宏逻辑：使用叠加式开关，确保不打断 Fn 层 */
+    /* 定义宏：使用叠加式逻辑，解锁后会自动显露下方的 Fn 层 */
     macros {
-        // 开启锁定：按下中键，并在现有层级上叠加 Layer 4 (LOCK)
         mmb_on: mmb_on {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&macro_press &mkp MCLK>, <&layer_on 4>;
+            bindings = <&macro_press &mkp MCLK>, <&macro_tap &layer_on 4>;
         };
-        // 关闭锁定：释放中键，并只撤销 Layer 4 (LOCK)
         mmb_off: mmb_off {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&macro_release &mkp MCLK>, <&layer_off 4>;
+            bindings = <&macro_release &mkp MCLK>, <&macro_tap &layer_off 4>;
         };
     };
 
@@ -130,6 +128,7 @@
             sensor-bindings = <&scroll_encoder>;
         };
 
+        /* 修正后的锁定层：已严格对齐按键数量 */
         mouse_lock_layer {
             display-name = "LOCK";
             bindings = <
