@@ -1,5 +1,5 @@
 #define ZMK_POINTING_DEFAULT_MOVE_VAL 1500  
-#define ZMK_POINTING_DEFAULT_SCRL_VAL 40    
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 20    // 配合 MacMouseFix，基础值不需要太高
 
 #include <input/processors.dtsi>
 #include <zephyr/dt-bindings/input/input-event-codes.h>
@@ -10,14 +10,17 @@
 
 &mmv_input_listener { input-processors = <&zip_xy_scaler 2 1>; };
 
-&msc_input_listener { input-processors = <&zip_scroll_scaler 2 1>; };
+// 缩放设为 1:1，让 MacMouseFix 完全接管滚动节奏
+&msc_input_listener { input-processors = <&zip_scroll_scaler 1 1>; };
 
+/* --- 配合 MacMouseFix 优化的线性滚动 --- */
 &msc {
-    acceleration-exponent = <2>;      
-    time-to-max-speed-ms = <200>;     
+    acceleration-exponent = <0>;      // 设为 0，关闭 ZMK 自带加速，解决上下不一致
+    time-to-max-speed-ms = <0>;       // 瞬时触发
     delay-ms = <0>;                   
 };
 
+/* --- 维持你满意的鼠标移动设置 --- */
 &mmv {
     time-to-max-speed-ms = <200>;    
     acceleration-exponent = <2>;     
@@ -37,6 +40,11 @@
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
             bindings = <&macro_release &mkp MCLK>, <&macro_tap &tog 4>;
+        };
+        open_bg: open_bg {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_press &kp LGUI>, <&macro_tap &mkp LCLK>, <&macro_release &kp LGUI>;
         };
     };
 
@@ -120,7 +128,7 @@
             display-name = "Fn";
             bindings = <
 &trans  &to 0           &kp W             &mkp MB4      &mmb_on         &mkp MB1                                     &mmv MOVE_UP                     &msc SCRL_LEFT  &msc SCRL_DOWN  &msc SCRL_UP  &msc SCRL_RIGHT  &to 0   &trans
-&trans  &kp LEFT_SHIFT  &kp LEFT_CONTROL  &kp LEFT_ALT  &mmb_on         &mkp MB2                      &mmv MOVE_LEFT  &mkp LCLK       &mmv MOVE_RIGHT  &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_UP  &mmv MOVE_RIGHT  &trans  &trans
+&trans  &kp LEFT_SHIFT  &kp LEFT_CONTROL  &kp LEFT_ALT  &open_bg        &mkp MB2                      &mmv MOVE_LEFT  &mkp LCLK       &mmv MOVE_RIGHT  &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_UP  &mmv MOVE_RIGHT  &trans  &trans
 &trans  &sys_reset      &trans            &bootloader   &kp LEFT_ARROW  &kp RIGHT_ARROW  &kp C_MUTE                  &mmv DOWN_ARROW                   &mkp MB4        &mkp MCLK       &mkp MB5      &sys_reset       &trans  &trans
                                           &trans        &kp LEFT_SHIFT  &mt LEFT_GUI SPACE                                                            &lt 1 TAB       &lt 2 ENTER     &to 0
             >;
@@ -131,7 +139,7 @@
             display-name = "LOCK";
             bindings = <
 &trans  &trans          &trans            &trans        &mmb_off        &trans                                  &trans          &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans          &trans            &trans        &mmb_off        &trans                &trans  &trans  &trans          &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans          &trans            &trans        &trans          &trans                &trans  &trans  &trans          &trans  &trans  &trans  &trans  &trans  &trans
 &trans  &trans          &trans            &trans        &trans          &trans  &trans          &trans          &trans          &trans  &trans  &trans  &trans  &trans
                         &trans            &trans        &trans                                                  &trans  &trans  &trans
             >;
