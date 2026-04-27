@@ -27,17 +27,19 @@
 &soft_off { hold-time-ms = <2000>; };
 
 / {
-    /* 定义宏：使用叠加式逻辑，解锁后会自动显露下方的 Fn 层 */
+    /* 定义宏：使用切换逻辑，确保动作对称 */
     macros {
+        // 开启锁定：按下中键，并叠加开启第 4 层 (LOCK)
         mmb_on: mmb_on {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&macro_press &mkp MCLK>, <&macro_tap &layer_on 4>;
+            bindings = <&macro_press &mkp MCLK>, <&macro_tap &tog 4>;
         };
+        // 关闭锁定：释放中键，并撤销第 4 层 (LOCK)
         mmb_off: mmb_off {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&macro_release &mkp MCLK>, <&macro_tap &layer_off 4>;
+            bindings = <&macro_release &mkp MCLK>, <&macro_tap &tog 4>;
         };
     };
 
@@ -128,13 +130,13 @@
             sensor-bindings = <&scroll_encoder>;
         };
 
-        /* 修正后的锁定层：已严格对齐按键数量 */
+        /* 修正后的锁定层：已严格对齐所有按键数 (13-15-14-6) */
         mouse_lock_layer {
             display-name = "LOCK";
             bindings = <
 &trans  &trans  &trans  &trans  &trans  &trans                                  &trans          &trans  &trans  &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &mmb_off  &trans                &trans  &trans  &trans          &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans  &trans                          &trans          &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans          &trans          &trans          &trans  &trans  &trans  &trans  &trans
                         &trans  &trans  &trans                                                  &trans  &trans  &trans
             >;
             sensor-bindings = <&scroll_encoder>;
