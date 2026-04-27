@@ -1,5 +1,5 @@
-#define ZMK_POINTING_DEFAULT_MOVE_VAL 1200  // 基础移动速度
-#define ZMK_POINTING_DEFAULT_SCRL_VAL 25    // 基础滚动速度
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 1500  // 基础速度进一步提升
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 25    
 
 #include <input/processors.dtsi>
 #include <zephyr/dt-bindings/input/input-event-codes.h>
@@ -18,11 +18,11 @@
     delay-ms = <0>;                   
 };
 
-/* --- 方案 B：精准 + 爆发模式配置 --- */
+/* --- 极速响应版：瞬时起步 + 高速航行 --- */
 &mmv {
-    time-to-max-speed-ms = <400>;    // 起步稍微加快，400ms 达到最高速
-    acceleration-exponent = <2>;     // 指数加速：轻按极慢实现精确定位，重按飞快
-    trigger-period-ms = <8>;         // 采样频率加倍，指针极其平滑
+    time-to-max-speed-ms = <150>;    // 起步时间大幅缩短，实现“弹射起步”
+    acceleration-exponent = <2>;     // 维持指数加速，保留微调精度的同时也让加速更猛
+    trigger-period-ms = <8>;         // 高频采样，保证高速移动下的顺滑度
 };
 
 &soft_off { hold-time-ms = <2000>; };
