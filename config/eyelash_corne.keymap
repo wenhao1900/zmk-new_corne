@@ -27,19 +27,19 @@
 &soft_off { hold-time-ms = <2000>; };
 
 / {
-    /* 优化后的宏：使用绝对跳转 &to 确保逻辑闭环 */
+    /* 优化宏逻辑：使用叠加式开关，确保不打断 Fn 层 */
     macros {
-        // 开启锁定：按下中键，并绝对跳转到第 4 层 (LOCK)
+        // 开启锁定：按下中键，并在现有层级上叠加 Layer 4 (LOCK)
         mmb_on: mmb_on {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&macro_press &mkp MCLK>, <&to 4>;
+            bindings = <&macro_press &mkp MCLK>, <&layer_on 4>;
         };
-        // 关闭锁定：释放中键，并绝对跳转回第 3 层 (Fn)
+        // 关闭锁定：释放中键，并只撤销 Layer 4 (LOCK)
         mmb_off: mmb_off {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&macro_release &mkp MCLK>, <&to 3>;
+            bindings = <&macro_release &mkp MCLK>, <&layer_off 4>;
         };
     };
 
