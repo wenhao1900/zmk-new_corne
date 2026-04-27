@@ -1,5 +1,5 @@
 #define ZMK_POINTING_DEFAULT_MOVE_VAL 1500  
-#define ZMK_POINTING_DEFAULT_SCRL_VAL 20    // 配合 MacMouseFix，基础值不需要太高
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 100   // 基础滚动步长大幅提升，解决幅度小的问题
 
 #include <input/processors.dtsi>
 #include <zephyr/dt-bindings/input/input-event-codes.h>
@@ -10,17 +10,15 @@
 
 &mmv_input_listener { input-processors = <&zip_xy_scaler 2 1>; };
 
-// 缩放设为 1:1，让 MacMouseFix 完全接管滚动节奏
-&msc_input_listener { input-processors = <&zip_scroll_scaler 1 1>; };
+/* --- 核心调整：统一上下左右的缩放倍率为 2 倍 --- */
+&msc_input_listener { input-processors = <&zip_scroll_scaler 2 2>; };
 
-/* --- 配合 MacMouseFix 优化的线性滚动 --- */
 &msc {
-    acceleration-exponent = <0>;      // 设为 0，关闭 ZMK 自带加速，解决上下不一致
-    time-to-max-speed-ms = <0>;       // 瞬时触发
+    acceleration-exponent = <0>;      // 线性滚动，确保上下左右逻辑完全对称
+    time-to-max-speed-ms = <0>;       // 瞬时响应，拒绝延迟感
     delay-ms = <0>;                   
 };
 
-/* --- 维持你满意的鼠标移动设置 --- */
 &mmv {
     time-to-max-speed-ms = <200>;    
     acceleration-exponent = <2>;     
