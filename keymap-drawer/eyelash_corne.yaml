@@ -85,7 +85,7 @@ layers:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '7', s: '&'}
   - $$mdi:volume-off$$
-  - {t: '$$mdi:menu-down$$', s: '$$mdi:mouse$$'}
+  - '&mmv DOWN_ARROW'
   - '1'
   - '4'
   - {t: '[', s: '{'}
@@ -152,7 +152,7 @@ layers:
   - {t: QWERTY, h: toggle}
   - W
   - '&mkp MB4'
-  - '&mkp MB2'
+  - '&mmb_on'
   - '&mkp MB1'
   - {t: '$$mdi:menu-up$$', s: '$$mdi:mouse$$'}
   - $$mdi:pan-left$$
@@ -183,7 +183,7 @@ layers:
   - $$mdi:arrow-left-bold$$
   - $$mdi:arrow-right-bold$$
   - $$mdi:volume-off$$
-  - {t: '$$mdi:menu-down$$', s: '$$mdi:mouse$$'}
+  - '&mmv DOWN_ARROW'
   - '&mkp MB4'
   - $$mdi:mouse-scroll-wheel$$
   - '&mkp MB5'
@@ -201,7 +201,7 @@ layers:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
+  - '&mmb_off'
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
