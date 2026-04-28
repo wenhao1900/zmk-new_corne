@@ -110,6 +110,11 @@
             bindings = <&kp APOSTROPHE>;
             key-positions = <36 37>;
         };
+
+        qw {
+            bindings = <&kp ESC>;
+            key-positions = <0 1>;
+        };
     };
 
     keymap {
