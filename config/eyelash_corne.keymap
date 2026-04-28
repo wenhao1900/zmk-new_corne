@@ -174,7 +174,7 @@
 &trans  &trans  &trans  &trans  &mmb_off  &kp LA(A)                    &trans          &trans  &trans  &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans    &trans               &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans    &trans     &trans            &trans          &trans  &trans  &trans  &trans  &trans  &trans
-                        &trans  &trans    &trans                                       &trans  &trans  &trans
+                        &trans  &trans    &kp SPACE                                    &trans  &trans  &trans
             >;
 
             sensor-bindings = <&scroll_encoder>;
