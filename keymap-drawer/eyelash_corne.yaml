@@ -254,3 +254,5 @@ combos:
   k: <
 - p: [36, 37]
   k: <
+- p: [0, 1]
+  k: $$mdi:keyboard-esc$$
