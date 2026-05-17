@@ -1,5 +1,8 @@
-#define ZMK_POINTING_DEFAULT_MOVE_VAL 1500
-#define ZMK_POINTING_DEFAULT_SCRL_VAL 100   // 基础滚动步长大幅提升，解决幅度小的问题
+// Copyright (c) 2022 The ZMK Contributors
+// SPDX-License-Identifier: MIT
+
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 2500  // 还原第一套的基础移动速度
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 20    // 还原第一套的滚轮速度
 
 #include <input/processors.dtsi>
 #include <zephyr/dt-bindings/input/input-event-codes.h>
@@ -8,22 +11,22 @@
 #include <dt-bindings/zmk/pointing.h>
 #include <dt-bindings/zmk/rgb.h>
 
-&mmv_input_listener { input-processors = <&zip_xy_scaler 2 1>; };
+// 统一缩放倍率为 1 1，关闭非对称缩放，确保上下左右鼠标移动速度完全一致
+&mmv_input_listener { input-processors = <&zip_xy_scaler 1 1>; };
+&msc_input_listener { input-processors = <&zip_scroll_scaler 1 1>; };
 
-/* --- 核心调整：统一上下左右的缩放倍率为 2 倍 --- */
-
-&msc_input_listener { input-processors = <&zip_scroll_scaler 2 2>; };
-
+// 还原第一套的滚轮行为参数
 &msc {
-    acceleration-exponent = <0>;      // 线性滚动，确保上下左右逻辑完全对称
-    time-to-max-speed-ms = <0>;       // 瞬时响应，拒绝延迟感
+    acceleration-exponent = <0>;      
+    time-to-max-speed-ms = <40>;       
     delay-ms = <0>;
 };
 
+// 还原第一套的鼠标移动行为参数（线性加速，300ms达到最大速度）
 &mmv {
-    time-to-max-speed-ms = <200>;
-    acceleration-exponent = <2>;
-    trigger-period-ms = <8>;
+    acceleration-exponent = <1>;      
+    time-to-max-speed-ms = <300>;    
+    delay-ms = <0>;
 };
 
 &soft_off { hold-time-ms = <2000>; };
@@ -123,10 +126,10 @@
         default_layer {
             display-name = "QWERTY";
             bindings = <
-&trans  &kp Q             &kp W               &kp E           &kp R            &kp T                                      &kp UP                &kp Y      &kp U        &kp I            &kp O                &kp P                      &trans
-&trans  &hm LEFT_SHIFT A  &hm LEFT_CONTROL S  &hm LEFT_ALT D  &hm LEFT_GUI F   &kp G                            &kp LEFT  &kp ENTER  &kp RIGHT  &kp H      &kp J        &hm RIGHT_ALT K  &hm RIGHT_CONTROL L  &hm RIGHT_SHIFT SEMICOLON  &trans
-&trans  &kp Z             &kp X               &kp C           &kp V            &kp B               &kp SPACE              &kp DOWN              &kp N      &kp M        &kp COMMA        &kp DOT              &kp FSLH                   &trans
-                                              &to 3           &lt 2 BACKSPACE  &mt LEFT_GUI SPACE                                               &lt 1 TAB  &lt 2 ENTER  &kp CLCK
+&trans  &kp Q               &kp W               &kp E               &kp R            &kp T                                                                      &kp UP                 &kp Y      &kp U        &kp I            &kp O                &kp P                      &trans
+&trans  &hm LEFT_SHIFT A    &hm LEFT_CONTROL S  &hm LEFT_ALT D  &hm LEFT_GUI F   &kp G                                                             &kp LEFT  &kp ENTER  &kp RIGHT  &kp H      &kp J        &hm RIGHT_ALT K  &hm RIGHT_CONTROL L  &hm RIGHT_SHIFT SEMICOLON  &trans
+&trans  &kp Z               &kp X               &kp C               &kp V            &kp B                &kp SPACE                                             &kp DOWN              &kp N      &kp M        &kp COMMA        &kp DOT              &kp FSLH                   &trans
+                                                                      &to 3            &lt 2 BACKSPACE  &mt LEFT_GUI SPACE                                                                                     &lt 1 TAB  &lt 2 ENTER  &kp CLCK
             >;
 
             sensor-bindings = <&inc_dec_kp C_VOLUME_UP C_VOL_DN>;
@@ -135,10 +138,10 @@
         lower_layer {
             display-name = "NUMBER";
             bindings = <
-&trans  &kp GRAVE       &kp UP_ARROW    &kp N3           &kp N4          &kp N9                                            &mmv MOVE_UP                      &kp NUMBER_3  &kp NUMBER_6  &trans         &trans     &kp N0       &trans
-&trans  &kp LEFT_ARROW  &kp DOWN_ARROW  &kp RIGHT_ARROW  &kp NUMBER_0    &kp NUMBER_8                      &mmv MOVE_LEFT  &mkp LCLK        &mmv MOVE_RIGHT  &kp NUMBER_2  &kp N5        &kp LA(MINUS)  &kp EQUAL  &kp LA(SQT)  &trans
-&trans  &trans          &trans          &trans           &trans          &kp N7              &kp C_MUTE                    &mmv DOWN_ARROW                   &kp NUMBER_1  &kp NUMBER_4  &kp LBKT       &kp RBKT   &kp CAPS     &trans
-                                        &trans           &kp LEFT_SHIFT  &mt LEFT_GUI SPACE                                                                  &kp TAB       &kp ENTER     &trans
+&trans  &kp GRAVE       &kp UP_ARROW    &kp N3           &kp N4          &kp N9                                                                             &mmv MOVE_UP                                          &kp NUMBER_3  &kp NUMBER_6  &trans         &trans     &kp N0       &trans
+&trans  &kp LEFT_ARROW  &kp DOWN_ARROW  &kp RIGHT_ARROW  &kp NUMBER_0    &kp NUMBER_8                                                      &mmv MOVE_LEFT  &mkp LCLK         &mmv MOVE_RIGHT  &kp NUMBER_2  &kp N5        &kp LA(MINUS)  &kp EQUAL  &kp LA(SQT)  &trans
+&trans  &trans          &trans          &trans           &trans          &kp N7               &kp C_MUTE                                                    &mmv DOWN_ARROW                                       &kp NUMBER_1  &kp NUMBER_4  &kp LBKT       &kp RBKT   &kp CAPS     &trans
+                                        &trans           &kp LEFT_SHIFT  &mt LEFT_GUI SPACE                                                                                                                                     &kp TAB       &kp ENTER    &trans
             >;
 
             sensor-bindings = <&scroll_encoder>;
@@ -147,10 +150,10 @@
         raise_layer {
             display-name = "SYMBOL";
             bindings = <
-&trans  &trans          &trans  &mkp MB4  &kp LA(Q)     &kp LA(A)                            &mmv MOVE_UP                     &kp NUMBER_7  &kp NUMBER_8  &kp NUMBER_9  &trans  &trans  &trans
-&trans  &kp LEFT_SHIFT  &trans  &trans    &trans        &trans               &mmv MOVE_LEFT  &mkp LCLK       &mmv MOVE_RIGHT  &kp NUMBER_4  &kp NUMBER_5  &kp NUMBER_6  &trans  &trans  &trans
-&trans  &trans          &trans  &none     &none         &trans     &trans                    &mmv MOVE_DOWN                   &kp NUMBER_1  &kp NUMBER_2  &kp NUMBER_3  &trans  &trans  &trans
-                                &trans    &kp NUMBER_0  &kp SPACE                                                             &kp TAB       &kp NUMBER_0  &trans
+&trans  &trans          &trans  &mkp MB4  &kp LA(Q)     &kp LA(A)                                                            &mmv MOVE_UP                                     &kp NUMBER_7  &kp NUMBER_8  &kp NUMBER_9  &trans  &trans  &trans
+&trans  &kp LEFT_SHIFT  &trans  &trans    &trans        &trans                                              &mmv MOVE_LEFT  &mkp LCLK         &mmv MOVE_RIGHT  &kp NUMBER_4  &kp NUMBER_5  &kp NUMBER_6  &trans  &trans  &trans
+&trans  &trans          &trans  &none     &none         &trans       &trans                                                 &mmv MOVE_DOWN                                   &kp NUMBER_1  &kp NUMBER_2  &kp NUMBER_3  &trans  &trans  &trans
+                                &trans    &kp NUMBER_0  &kp SPACE                                                                                                               &kp TAB       &kp NUMBER_0  &trans
             >;
 
             sensor-bindings = <&scroll_encoder>;
@@ -159,10 +162,10 @@
         layer_3 {
             display-name = "Fn";
             bindings = <
-&trans  &to 0               &kp W             &mkp MB4      &mmb_on          &mkp MB1                                          &mmv MOVE_UP                      &msc SCRL_LEFT  &msc SCRL_DOWN  &msc SCRL_UP  &msc SCRL_RIGHT  &to 0   &trans
-&trans  &mt LEFT_SHIFT ESC  &kp LEFT_CONTROL  &kp LEFT_ALT  &open_bg         &mkp MB2                          &mmv MOVE_LEFT  &mkp LCLK        &mmv MOVE_RIGHT  &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_UP  &mmv MOVE_RIGHT  &trans  &trans
-&trans  &kp LEFT_ARROW      &kp RIGHT_ARROW   &kp C         &kp V            &kp ENTER           &kp C_MUTE                    &mmv DOWN_ARROW                   &mkp MB4        &mkp MCLK       &mkp MB5      &sys_reset       &trans  &trans
-                                              &trans        &lt 4 BACKSPACE  &mt LEFT_GUI SPACE                                                                  &lt 1 TAB       &lt 2 ENTER     &to 0
+&trans  &to 0               &kp W               &mkp MB4      &mmb_on          &mkp MB1                                                                     &mmv MOVE_UP                                      &msc SCRL_LEFT  &msc SCRL_DOWN  &msc SCRL_UP  &msc SCRL_RIGHT  &to 0   &trans
+&trans  &mt LEFT_SHIFT ESC  &kp LEFT_CONTROL    &kp LEFT_ALT  &open_bg         &mkp MB2                                                   &mmv MOVE_LEFT  &mkp LCLK         &mmv MOVE_RIGHT  &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_UP  &mmv MOVE_RIGHT  &trans  &trans
+&trans  &kp LEFT_ARROW      &kp RIGHT_ARROW     &kp C         &kp V            &kp ENTER            &kp C_MUTE                                            &mmv DOWN_ARROW                                   &mkp MB4        &mkp MCLK       &mkp MB5      &sys_reset       &trans  &trans
+                                                              &trans        &lt 4 BACKSPACE  &mt LEFT_GUI SPACE                                                                                      &lt 1 TAB       &lt 2 ENTER      &to 0
             >;
 
             sensor-bindings = <&scroll_encoder>;
@@ -171,10 +174,10 @@
         mouse_lock_layer {
             display-name = "LOCK";
             bindings = <
-&trans  &trans  &trans  &trans  &mmb_off  &kp LA(A)                    &trans          &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans    &trans               &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans    &trans     &trans            &trans          &trans  &trans  &trans  &trans  &trans  &trans
-                        &trans  &trans    &kp SPACE                                    &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &mmb_off  &kp LA(A)                     &trans            &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans    &trans        &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans    &trans        &trans          &trans            &trans  &trans  &trans  &trans  &trans  &trans
+                        &trans  &trans    &kp SPACE                                       &trans  &trans  &trans
             >;
 
             sensor-bindings = <&scroll_encoder>;
