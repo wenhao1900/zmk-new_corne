@@ -17,7 +17,7 @@
 
 &msc_input_listener { input-processors = <&zip_scroll_scaler 1 1>; };
 
-// 还原第一套的滚轮行为参数
+// 还原第一套的滚轮行为参数，speed 那里之前是 40
 
 &msc {
     acceleration-exponent = <0>;
