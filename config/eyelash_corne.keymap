@@ -28,8 +28,8 @@
 // 还原第一套的鼠标移动行为参数（线性加速，300ms达到最大速度）
 
 &mmv {
-    acceleration-exponent = <0>;
-    time-to-max-speed-ms = <0>;
+    acceleration-exponent = <1>;
+    time-to-max-speed-ms = <150>;
     delay-ms = <0>;
 };
 
