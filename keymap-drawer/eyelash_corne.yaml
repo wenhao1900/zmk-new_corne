@@ -48,7 +48,7 @@ layers:
   - {t: '$$mdi:keyboard-space$$', h: '$$mdi:apple-keyboard-command$$'}
   - {t: ',', h: NUMBER, s: <}
   - {t: '$$mdi:keyboard-return$$', h: SYMBOL}
-  - CLCK
+  - {t: '$$mdi:apple-keyboard-caps$$', h: '$$mdi:apple-keyboard-shift$$'}
   NUMBER:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '`', s: '~'}
@@ -74,9 +74,9 @@ layers:
   - {t: '$$mdi:menu-right$$', s: '$$mdi:mouse$$'}
   - '2'
   - {t: '5', s: '%'}
-  - {t: Alt+-, s: Alt+_}
+  - {t: '-', s: _}
   - {t: '=', s: +}
-  - {t: Alt+', s: Alt+"}
+  - {t: '''', s: '"'}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
@@ -184,9 +184,9 @@ layers:
   - {t: '$$mdi:keyboard-return$$', type: enter}
   - $$mdi:volume-off$$
   - '&mmv DOWN_ARROW'
-  - '&mkp MB4'
-  - $$mdi:mouse-scroll-wheel$$
-  - '&mkp MB5'
+  - {t: Gui+=, s: Gui++}
+  - Gui+0
+  - {t: Gui+-, s: Gui+_}
   - {t: '$$mdi:backup-restore$$', type: bootloader}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
@@ -198,9 +198,9 @@ layers:
   - '&mkp MB2'
   LOCK:
   - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
+  - '1'
+  - '2'
+  - '3'
   - '&mmb_off'
   - Alt+A
   - {t: '$$mdi:transfer$$', type: trans}
@@ -250,8 +250,8 @@ combos:
   k: (
 - p: [7, 8]
   k: )
-- p: [32, 33]
-  k: <
+- p: [32, 33, 28]
+  k: Sft+<
 - p: [36, 37]
   k: <
 - p: [0, 1]
