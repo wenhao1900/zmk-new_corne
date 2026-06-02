@@ -110,7 +110,7 @@
 
         vb {
             bindings = <&kp LS(APOSTROPHE)>;
-            key-positions = <32 33 28>;
+            key-positions = <32 33>;
         };
 
         nm {
@@ -120,7 +120,7 @@
 
         qw {
             bindings = <&kp ESC>;
-            key-positions = <0 1>;
+            key-positions = <1 2>;
         };
     };
 
