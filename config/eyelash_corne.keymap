@@ -142,9 +142,9 @@
         lower_layer {
             display-name = "NUMBER";
             bindings = <
-&trans  &kp GRAVE       &kp UP_ARROW    &kp N3           &kp N4          &kp N9                                            &mmv MOVE_UP                      &kp NUMBER_3  &kp NUMBER_6  &trans     &trans     &kp N0    &trans
-&trans  &kp LEFT_ARROW  &kp DOWN_ARROW  &kp RIGHT_ARROW  &kp NUMBER_0    &kp NUMBER_8                      &mmv MOVE_LEFT  &mkp LCLK        &mmv MOVE_RIGHT  &kp NUMBER_2  &kp N5        &kp MINUS  &kp EQUAL  &kp SQT   &trans
-&trans  &trans          &trans          &trans           &trans          &kp N7              &kp C_MUTE                    &mmv DOWN_ARROW                   &kp NUMBER_1  &kp NUMBER_4  &kp LBKT   &kp RBKT   &kp CAPS  &trans
+&trans  &kp GRAVE       &kp UP_ARROW    &kp N3           &kp N4          &kp N9                                            &mmv MOVE_UP                      &kp NUMBER_3  &kp NUMBER_6  &kp RIGHT_ALT  &kp RIGHT_CONTROL  &kp RSHIFT  &trans
+&trans  &kp LEFT_ARROW  &kp DOWN_ARROW  &kp RIGHT_ARROW  &kp NUMBER_0    &kp NUMBER_8                      &mmv MOVE_LEFT  &mkp LCLK        &mmv MOVE_RIGHT  &kp NUMBER_2  &kp N5        &kp MINUS      &kp EQUAL          &kp SQT     &trans
+&trans  &trans          &trans          &trans           &trans          &kp N7              &kp C_MUTE                    &mmv DOWN_ARROW                   &kp NUMBER_1  &kp NUMBER_4  &kp LBKT       &kp RBKT           &kp ESC     &trans
                                         &kp TAB          &kp LEFT_SHIFT  &mt LEFT_GUI SPACE                                                                  &kp TAB       &kp ENTER     &trans
             >;
 
