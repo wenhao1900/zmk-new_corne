@@ -1,8 +1,8 @@
 // Copyright (c) 2022 The ZMK Contributors
 // SPDX-License-Identifier: MIT
 
-#define ZMK_POINTING_DEFAULT_MOVE_VAL 2500  // 还原第一套的基础移动速度
-#define ZMK_POINTING_DEFAULT_SCRL_VAL 20    // 还原第一套的滚轮速度
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 2500  // 基础移动速度
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 20    // 滚轮速度
 
 #include <input/processors.dtsi>
 #include <zephyr/dt-bindings/input/input-event-codes.h>
@@ -11,21 +11,26 @@
 #include <dt-bindings/zmk/pointing.h>
 #include <dt-bindings/zmk/rgb.h>
 
-// 统一缩放倍率为 1 1，关闭非对称缩放，确保上下左右鼠标移动速度完全一致
-
+// 1. 基础指针/滚轮缩放
 &mmv_input_listener { input-processors = <&zip_xy_scaler 1 1>; };
-
 &msc_input_listener { input-processors = <&zip_scroll_scaler 1 1>; };
 
-// 还原第一套的滚轮行为参数
+/* 2. 针对 Eyelash Corne 轨迹球的图层滚动转换 */
+/ {
+    // 适配大部分 Eyelash Corne 的轨迹球输入监听定义
+    trackball_scroll_listener {
+        compatible = "zmk,input-listener";
+        device = <&vtrackball>; // 若编译报错 vtrackball，可尝试改为 trackball
+        layers = <4>;
+        input-processors = <&zip_scroll_transform>, <&zip_scroll_scaler 1 1>;
+    };
+};
 
 &msc {
     acceleration-exponent = <0>;
     time-to-max-speed-ms = <0>;
     delay-ms = <0>;
 };
-
-// 还原第一套的鼠标移动行为参数
 
 &mmv {
     acceleration-exponent = <1>;
