@@ -11,18 +11,17 @@
 #include <dt-bindings/zmk/pointing.h>
 #include <dt-bindings/zmk/rgb.h>
 
-// 1. 设置基础指针/滚轮缩放
-&mmv_input_listener { input-processors = <&zip_xy_scaler 1 1>; };
-&msc_input_listener { input-processors = <&zip_scroll_scaler 1 1>; };
+// 直接挂载到固件原生存在的 &mmv_input_listener 节点下
+&mmv_input_listener {
+    input-processors = <&zip_xy_scaler 1 1>;
 
-// 2. 核心：告诉固件在第 4 层 (SCROLL) 时将轨迹球位移转换为原生平滑滚轮
-&trackball_listener {
-    status = "okay";
-    scroll {
+    scroll-mode {
         layers = <4>;
         input-processors = <&zip_scroll_transform>, <&zip_scroll_scaler 1 1>;
     };
 };
+
+&msc_input_listener { input-processors = <&zip_scroll_scaler 1 1>; };
 
 &msc {
     acceleration-exponent = <0>;
