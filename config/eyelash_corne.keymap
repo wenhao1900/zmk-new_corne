@@ -11,12 +11,11 @@
 #include <dt-bindings/zmk/pointing.h>
 #include <dt-bindings/zmk/rgb.h>
 
-// 挂载到固件原生的 &mmv_input_listener 下
-// 当激活 4 号图层 (SCROLL) 时，自动将轨迹球 XY 位移映射为原生滚轮信号
+/* 挂载到 &mmv_input_listener：在 4 号图层激活时强制将 XY 位移转化为滚轮信号 */
 &mmv_input_listener {
     input-processors = <&zip_xy_scaler 1 1>;
 
-    scroll-mode {
+    scroll_mode {
         layers = <4>;
         input-processors = <&zip_xy_to_scroll_mapper>, <&zip_scroll_scaler 1 1>;
     };
