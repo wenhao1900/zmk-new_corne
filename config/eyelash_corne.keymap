@@ -11,9 +11,18 @@
 #include <dt-bindings/zmk/pointing.h>
 #include <dt-bindings/zmk/rgb.h>
 
-// 指针移动与滚轮基础缩放
+// 1. 设置基础指针/滚轮缩放
 &mmv_input_listener { input-processors = <&zip_xy_scaler 1 1>; };
 &msc_input_listener { input-processors = <&zip_scroll_scaler 1 1>; };
+
+// 2. 核心：告诉固件在第 4 层 (SCROLL) 时将轨迹球位移转换为原生平滑滚轮
+&trackball_listener {
+    status = "okay";
+    scroll {
+        layers = <4>;
+        input-processors = <&zip_scroll_transform>, <&zip_scroll_scaler 1 1>;
+    };
+};
 
 &msc {
     acceleration-exponent = <0>;
@@ -138,7 +147,7 @@
             bindings = <
 &trans  &to 3           &trans  &mkp MB4   &kp LA(Q)     &kp LA(A)                            &mmv MOVE_UP                     &kp NUMBER_7  &kp NUMBER_8  &kp NUMBER_9  &trans  &trans  &trans
 &trans  &kp LEFT_SHIFT  &trans  &kp ENTER  &trans        &trans               &mmv MOVE_LEFT  &mkp LCLK        &mmv MOVE_RIGHT &kp NUMBER_4  &kp NUMBER_5  &kp NUMBER_6  &trans  &trans  &trans
-&trans  &trans          &trans  &none      &none         &trans     &trans                                     &mmv MOVE_DOWN                  &kp NUMBER_1  &kp NUMBER_2  &kp NUMBER_3  &trans  &trans  &trans
+&trans  &trans          &trans  &none      &none         &trans     &trans                                     &mmv DOWN_ARROW                  &kp NUMBER_1  &kp NUMBER_2  &kp NUMBER_3  &trans  &trans  &trans
                                 &kp ESC    &kp NUMBER_0  &kp SPACE                                                                             &kp TAB       &kp NUMBER_0  &trans
             >;
 
