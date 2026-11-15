@@ -1,18 +1,18 @@
 manifest:
   remotes:
-    - name: zmkfirmware
-      url-base: https://github.com/zmkfirmware
-      # Additional modules containing boards/shields/custom code can be listed here as well.
-      # See:
-      # - https://zmk.dev/docs/features/modules
-      # - https://docs.zephyrproject.org/3.5.0/develop/west/manifest.html#projects
+    - name: cormoran
+      url-base: https://github.com/cormoran
   projects:
     - name: eyelash_corne
       url: https://github.com/a741725193/zmk-new_corne
       revision: main
     - name: zmk
-      remote: zmkfirmware
-      revision: v0.3.0
+      remote: cormoran
+      # v0.3-branch+custom-studio-protocol+ble
+      revision: 6ca2d22692b5b4e3e6b38f2ba4170141755ad6fb
       import: app/west.yml
+    - name: zmk-module-ble-management
+      remote: cormoran
+      revision: 57738cc4fc6ba80e82a7ac57741a0339cb186cd4
   self:
     path: config
